@@ -7,7 +7,13 @@ git config --global --add safe.directory /github/workspace
 git fetch --tags
 # This suppress an error occurred when the repository is a complete one.
 
-git fetch --prune --unshallow || true
+if [ -f .git/shallow ]; then
+  echo "Repository is shallow. Unshallowing..."
+  git fetch --prune --unshallow
+else
+  echo "Repository is complete. Skipping unshallowing."
+fi
+
 
 latest_tag=''
 
